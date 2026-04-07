@@ -38,6 +38,12 @@ public class GestionVentas extends javax.swing.JPanel {
         prepararBuscadorCliente();
         prepararBuscadorEmpleado();
         prepararBuscadorProducto();
+        
+        txtBuscarProductos.putClientProperty("JTextField.placeholderText", "Nombre o ID del producto...");
+        txtBuscarCliente.putClientProperty("JTextField.placeholderText", "Nombre o ID del Cliente...");
+        txtBuscarEmpleado.putClientProperty("JTextField.placeholderText", "Nombre o ID del Empleado...");
+        txtCantidad.putClientProperty("JTextField.placeholderText", "Ej: 1");
+        
     }
     
     private void prepararTablaCarrito() {

@@ -14,6 +14,13 @@ public class FormLogin extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
+        
+        txtUsuario.putClientProperty("JTextField.placeholderText", "Tu usuario");
+        
+        txtPass.putClientProperty("JTextField.placeholderText", "Ingresa tu contraseña");
+
+        // El ojito usa PasswordField (¡sin la 'J'!)
+        txtPass.putClientProperty("PasswordField.showRevealButton", true);
     }
 
     /**
@@ -183,24 +190,14 @@ public class FormLogin extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+            javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+            javax.swing.UIManager.put("PasswordField.showRevealButton", true);
+        } catch (Exception ex) {
+            System.err.println("Falló al inicializar FlatLaf");
+        }   
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FormLogin().setVisible(true));
     }
 
