@@ -223,6 +223,7 @@ public class LoginModerno extends javax.swing.JFrame {
         dao.UsuarioDAO dao = new dao.UsuarioDAO();
         
         if (dao.validarLogin(user, pass)) {
+            gui.MenuPrincipal.usuarioActual = user;
             // Entró con éxito, abrimos el Menú Principal
             MenuPrincipal menu = new MenuPrincipal();
             menu.setVisible(true);

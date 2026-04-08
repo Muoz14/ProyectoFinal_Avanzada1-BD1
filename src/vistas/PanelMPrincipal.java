@@ -26,7 +26,7 @@ import javax.swing.Timer;
 
 public class PanelMPrincipal extends javax.swing.JPanel {
     
-    // Componentes del Menú
+// Componentes del Menú
     private JButton btnGestiones;
     private JButton btnReportes;
     private JButton btnCerrarSesion;
@@ -35,6 +35,7 @@ public class PanelMPrincipal extends javax.swing.JPanel {
     private final Color brandDarkBlue = Color.decode("#00384E");
     private final Color brandLight = Color.WHITE;
     private final Color hoverBlue = Color.decode("#005475");
+    private final Color accentColor = Color.decode("#5BC0DE"); // Un celeste suave para el texto del usuario
 
     public PanelMPrincipal() {
         initComponentsPremium();
@@ -52,7 +53,7 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbc.anchor = GridBagConstraints.NORTH; 
 
         // =========================================================
-        // 1. SECCIÓN SUPERIOR: ÁREA DE MARCA
+        // 1. SECCIÓN SUPERIOR: ÁREA DE MARCA Y USUARIO
         // =========================================================
         JPanel pnlHeader = new JPanel(new GridBagLayout());
         pnlHeader.setBackground(brandDarkBlue);
@@ -61,6 +62,7 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcHeader.weightx = 1.0;
         gbcHeader.anchor = GridBagConstraints.CENTER;
         
+        // Logo
         JLabel lblLogo = new JLabel();
         try {
             ImageIcon originalIcon = new ImageIcon(getClass().getResource("/recursos/apoloMenu.png"));
@@ -75,6 +77,7 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcHeader.insets = new Insets(50, 0, 15, 0); 
         pnlHeader.add(lblLogo, gbcHeader);
         
+        // Texto APOLO
         JLabel lblApolo = new JLabel("APOLO");
         lblApolo.setFont(new Font("Segoe UI", Font.BOLD, 48));
         lblApolo.setForeground(brandLight);
@@ -82,12 +85,31 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcHeader.insets = new Insets(0, 0, 10, 0);
         pnlHeader.add(lblApolo, gbcHeader);
 
+        // Subtítulo
         JLabel lblSistema = new JLabel("SISTEMA DE GESTIÓN");
         lblSistema.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         lblSistema.setForeground(new Color(255, 255, 255, 180)); 
         lblSistema.setHorizontalAlignment(SwingConstants.CENTER);
-        gbcHeader.insets = new Insets(0, 0, 40, 0); 
+        gbcHeader.insets = new Insets(0, 0, 20, 0); 
         pnlHeader.add(lblSistema, gbcHeader);
+
+        // --- NUEVO: ETIQUETA DE USUARIO LOGUEADO ---
+        // Leemos la variable global de MenuPrincipal. Si está vacía, ponemos "Invitado" por defecto
+        String userActual = (MenuPrincipal.usuarioActual == null || MenuPrincipal.usuarioActual.isEmpty()) 
+                             ? "Invitado" : MenuPrincipal.usuarioActual;
+                             
+        JLabel lblUsuario = new JLabel("● Usuario: " + userActual);
+        lblUsuario.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblUsuario.setForeground(accentColor); // Usamos el celeste para que resalte elegante
+        lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        // Le ponemos un pequeño fondo para que parezca una "insignia" (badge)
+        lblUsuario.setOpaque(true);
+        lblUsuario.setBackground(new Color(255, 255, 255, 20)); // Fondo semi-transparente
+        lblUsuario.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        
+        gbcHeader.insets = new Insets(0, 0, 40, 0); // Margen grande para separar del menú inferior
+        pnlHeader.add(lblUsuario, gbcHeader);
 
         gbc.gridy = 0;
         gbc.weighty = 0.0; 
@@ -115,14 +137,12 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcMenu.gridy = 0;
         pnlMenu.add(lblSectionMain, gbcMenu);
         
-        // Botón Gestiones
         btnGestiones = crearBotonMenu("Ir a Gestiones");
         btnGestiones.addActionListener(this::btnGproductosActionPerformed);
         gbcMenu.insets = new Insets(0, 20, 10, 20);
         gbcMenu.gridy = 1;
         pnlMenu.add(btnGestiones, gbcMenu);
 
-        // Botón Reportes
         btnReportes = crearBotonMenu("Ir a Reportes");
         btnReportes.addActionListener(this::btnGusuarios1ActionPerformed);
         gbcMenu.gridy = 2;
@@ -142,7 +162,6 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcMenu.gridy = 4;
         pnlMenu.add(lblSectionAccount, gbcMenu);
 
-        // Botón Cerrar Sesión
         btnCerrarSesion = crearBotonMenu("Cerrar Sesión");
         btnCerrarSesion.setForeground(new Color(255, 90, 90)); 
         btnCerrarSesion.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -179,7 +198,6 @@ public class PanelMPrincipal extends javax.swing.JPanel {
     private JButton crearBotonMenu(String texto) {
         JButton boton = new JButton(texto);
         
-        // TRUCO MAESTRO: Imagen invisible para que el IconTextGap funcione siempre
         BufferedImage imgInvisible = new BufferedImage(1, 24, BufferedImage.TYPE_INT_ARGB);
         boton.setIcon(new ImageIcon(imgInvisible));
 
@@ -242,7 +260,7 @@ public class PanelMPrincipal extends javax.swing.JPanel {
     }
 
     // =========================================================
-    // TU LÓGICA DE NAVEGACIÓN Y ACCIONES EXACTAMENTE IGUAL
+    // TU LÓGICA DE NAVEGACIÓN Y ACCIONES 
     // =========================================================
 
     private void btnGproductosActionPerformed(java.awt.event.ActionEvent evt) {                                              

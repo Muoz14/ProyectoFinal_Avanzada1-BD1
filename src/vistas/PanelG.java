@@ -29,7 +29,7 @@ public class PanelG extends JPanel {
     private JButton btnGproductos;
     private JButton btnGventas;
     private JButton btnInventario;
-    private JButton btnGusuarios;
+    private JButton btnGusuarios; // Este ahora es condicional
     private JButton btnRegresar;
 
     // Colores base de la marca
@@ -42,22 +42,27 @@ public class PanelG extends JPanel {
     }
     
     // =========================================================
-    // 1. EL REINICIO VISUAL BLINDADO
+    // 1. EL REINICIO VISUAL BLINDADO (A prueba de nulos)
     // =========================================================
     private void activarBoton(JButton botonActivo) {
         JButton[] botones = {btnGclientes, btnGproductos, btnGventas, btnInventario, btnGusuarios};
         
         for (JButton b : botones) {
-            b.setEnabled(true);
-            b.putClientProperty("isHovered", false); 
-            b.setIconTextGap(20); // Regresa el texto a su lugar
-            b.setBorderPainted(false);
-            b.setContentAreaFilled(false);
+            // IMPORTANTE: Verificamos que el botón exista antes de apagarlo
+            if (b != null) { 
+                b.setEnabled(true);
+                b.putClientProperty("isHovered", false); 
+                b.setIconTextGap(20); 
+                b.setBorderPainted(false);
+                b.setContentAreaFilled(false);
+            }
         }
 
-        botonActivo.setEnabled(false);
-        botonActivo.putClientProperty("isHovered", false);
-        botonActivo.setIconTextGap(20);
+        if (botonActivo != null) {
+            botonActivo.setEnabled(false);
+            botonActivo.putClientProperty("isHovered", false);
+            botonActivo.setIconTextGap(20);
+        }
     }
 
     private void initComponentsPremium() {
@@ -99,7 +104,7 @@ public class PanelG extends JPanel {
         add(pnlHeader, gbc);
 
         // =========================================================
-        // 2. LISTA DE BOTONES DE GESTIÓN (Puro Texto)
+        // 2. LISTA DE BOTONES DE GESTIÓN (Con Seguridad de Roles)
         // =========================================================
         JPanel pnlMenu = new JPanel(new GridBagLayout());
         pnlMenu.setBackground(brandDarkBlue);
@@ -129,10 +134,16 @@ public class PanelG extends JPanel {
         gbcMenu.gridy = 3;
         pnlMenu.add(btnInventario, gbcMenu);
 
-        btnGusuarios = crearBotonMenu("Gestión de Usuarios");
-        btnGusuarios.addActionListener(this::btnGusuariosActionPerformed);
-        gbcMenu.gridy = 4;
-        pnlMenu.add(btnGusuarios, gbcMenu);
+        // =========================================================
+        // LA MAGIA: RESTRICCIÓN DE USUARIO (ROLES)
+        // =========================================================
+        // Comprueba si la variable global dice "Admin" (sin importar mayúsculas)
+        if ("Admin".equalsIgnoreCase(MenuPrincipal.usuarioActual)) {
+            btnGusuarios = crearBotonMenu("Gestión de Usuarios");
+            btnGusuarios.addActionListener(this::btnGusuariosActionPerformed);
+            gbcMenu.gridy = 4;
+            pnlMenu.add(btnGusuarios, gbcMenu);
+        }
 
         gbc.gridy = 1;
         add(pnlMenu, gbc);
@@ -154,7 +165,7 @@ public class PanelG extends JPanel {
         
         gbc.gridy = 3;
         gbc.weighty = 0.0;
-        gbc.insets = new Insets(0, 20, 100, 20); // Subido a 100px
+        gbc.insets = new Insets(0, 20, 100, 20); 
         add(btnRegresar, gbc);
     }
 
@@ -164,7 +175,6 @@ public class PanelG extends JPanel {
     private JButton crearBotonMenu(String texto) {
         JButton boton = new JButton(texto);
         
-        // TRUCO MAESTRO: Imagen invisible para que el IconTextGap funcione siempre
         BufferedImage imgInvisible = new BufferedImage(1, 24, BufferedImage.TYPE_INT_ARGB);
         boton.setIcon(new ImageIcon(imgInvisible));
 
@@ -225,11 +235,12 @@ public class PanelG extends JPanel {
 
         return boton;
     }
+
     // =========================================================
-    // TU LÓGICA DE EVENTOS (Intacta)
+    // LÓGICA DE EVENTOS (Intacta)
     // =========================================================
 
-    private void btnGclientesActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void btnGclientesActionPerformed(java.awt.event.ActionEvent evt) {                                              
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -237,7 +248,7 @@ public class PanelG extends JPanel {
             menuBase.mostrarContenidoP(gC);
             activarBoton(btnGclientes);
         }
-    }                                            
+    }                                             
 
     private void btnGproductosActionPerformed(java.awt.event.ActionEvent evt) {                                              
         Window window = SwingUtilities.getWindowAncestor(this);
@@ -249,6 +260,16 @@ public class PanelG extends JPanel {
         }
     }                                             
 
+    private void btnGventasActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MenuPrincipal) {
+            MenuPrincipal menuBase = (MenuPrincipal) window;
+            GestionVentas gV = new GestionVentas();
+            menuBase.mostrarContenidoP(gV);
+            activarBoton(btnGventas);
+        }
+    }
+
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {                                              
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
@@ -259,7 +280,7 @@ public class PanelG extends JPanel {
         }
     }                                             
 
-    private void btnGusuariosActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void btnGusuariosActionPerformed(java.awt.event.ActionEvent evt) {                                              
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -269,7 +290,7 @@ public class PanelG extends JPanel {
         }
     }                                             
 
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {                                             
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -279,16 +300,6 @@ public class PanelG extends JPanel {
             
             PanelBienvenida bienvenida = new PanelBienvenida();
             menuBase.mostrarContenidoP(bienvenida);
-        }
-    }                                           
-
-    private void btnGventasActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        Window window = SwingUtilities.getWindowAncestor(this);
-        if (window instanceof MenuPrincipal) {
-            MenuPrincipal menuBase = (MenuPrincipal) window;
-            GestionVentas gV = new GestionVentas();
-            menuBase.mostrarContenidoP(gV);
-            activarBoton(btnGventas);
         }
     }
     
