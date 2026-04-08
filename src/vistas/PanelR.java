@@ -1,5 +1,6 @@
 package vistas;
 
+import vistas.ReporteBajoInventario;
 import gui.MenuPrincipal;
 import java.awt.Color;
 import java.awt.Cursor;

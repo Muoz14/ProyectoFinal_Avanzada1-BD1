@@ -1,16 +1,273 @@
 package vistas;
 
 import dao.*;
+import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Date;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class ReporteVentasFecha extends javax.swing.JPanel {
 
+    // Componentes de la vista
+    private JSpinner txtDesde;
+    private JSpinner txtHasta;
+    private JButton btnGenerar;
+    private JTable tablaVentas;
+    private JLabel lblTotal;
+
+    // Paleta de colores Soft UI
+    private final Color bgApp = new Color(240, 244, 248); // Gris azulado ultra claro
+    private final Color textDark = new Color(30, 41, 59); // Texto principal oscuro
+    private final Color textMuted = new Color(100, 116, 139); // Texto secundario
+    private final Color brandDarkBlue = Color.decode("#00384E");
+    private final Color accentBlue = new Color(59, 130, 246); // Azul vibrante
+
     public ReporteVentasFecha() {
-        initComponents();
-        txtDesde.setEditor(new javax.swing.JSpinner.DateEditor(txtDesde, "dd/MM/yyyy"));
-        txtHasta.setEditor(new javax.swing.JSpinner.DateEditor(txtHasta, "dd/MM/yyyy"));
+        initComponentsPremium();
+    }
+
+    private void initComponentsPremium() {
+        setBackground(bgApp);
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50)); // Márgenes amplios
+
+        // ==========================================
+        // 1. ENCABEZADO (Títulos)
+        // ==========================================
+        JPanel pnlTitulos = new JPanel();
+        pnlTitulos.setLayout(new BoxLayout(pnlTitulos, BoxLayout.Y_AXIS));
+        pnlTitulos.setBackground(bgApp);
+        pnlTitulos.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
+        JLabel lblTitulo = new JLabel("Corte de Caja");
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 38));
+        lblTitulo.setForeground(textDark);
+
+        JLabel lblSubtitulo = new JLabel("Reporte de ingresos y ventas filtrado por rango de fechas");
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        lblSubtitulo.setForeground(textMuted);
+
+        pnlTitulos.add(lblTitulo);
+        pnlTitulos.add(Box.createVerticalStrut(5));
+        pnlTitulos.add(lblSubtitulo);
+
+        add(pnlTitulos, BorderLayout.NORTH);
+
+        // ==========================================
+        // 2. CONTENIDO CENTRAL (Controles + Tabla)
+        // ==========================================
+        JPanel pnlCentro = new JPanel(new BorderLayout(0, 20)); // Espacio vertical de 20px
+        pnlCentro.setBackground(bgApp);
+
+        // --- TARJETA DE CONTROLES (Filtros de Fecha) ---
+        PanelRedondeado pnlControles = new PanelRedondeado(25);
+        pnlControles.setLayout(new GridBagLayout());
+        pnlControles.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Etiqueta Desde
+        JLabel lblDesde = new JLabel("Desde la fecha:");
+        lblDesde.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblDesde.setForeground(textMuted);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.0;
+        pnlControles.add(lblDesde, gbc);
+
+        // Spinner Desde
+        txtDesde = new JSpinner(new SpinnerDateModel());
+        txtDesde.setEditor(new JSpinner.DateEditor(txtDesde, "dd/MM/yyyy"));
+        estilizarSpinner(txtDesde);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        pnlControles.add(txtDesde, gbc);
+
+        // Etiqueta Hasta
+        JLabel lblHasta = new JLabel("Hasta la fecha:");
+        lblHasta.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblHasta.setForeground(textMuted);
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        pnlControles.add(lblHasta, gbc);
+
+        // Spinner Hasta
+        txtHasta = new JSpinner(new SpinnerDateModel());
+        txtHasta.setEditor(new JSpinner.DateEditor(txtHasta, "dd/MM/yyyy"));
+        estilizarSpinner(txtHasta);
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        pnlControles.add(txtHasta, gbc);
+
+        // Separador
+        gbc.gridx = 4; gbc.weightx = 0.5;
+        pnlControles.add(Box.createHorizontalGlue(), gbc);
+
+        // Botón Generar (Estilo Moderno)
+        btnGenerar = new JButton("Generar Reporte");
+        btnGenerar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnGenerar.setBackground(brandDarkBlue);
+        btnGenerar.setForeground(Color.WHITE);
+        btnGenerar.setFocusPainted(false);
+        btnGenerar.setBorderPainted(false);
+        btnGenerar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnGenerar.setPreferredSize(new Dimension(180, 40));
+        btnGenerar.putClientProperty("JButton.buttonType", "roundRect"); // Si usas FlatLaf lo redondea
+        btnGenerar.addActionListener(this::btnGenerarActionPerformed);
+        gbc.gridx = 5; gbc.weightx = 0.0;
+        pnlControles.add(btnGenerar, gbc);
+
+        pnlCentro.add(pnlControles, BorderLayout.NORTH);
+
+        // --- TARJETA DE LA TABLA Y TOTAL ---
+        PanelRedondeado pnlTablaContenedor = new PanelRedondeado(25);
+        pnlTablaContenedor.setLayout(new BorderLayout());
+        pnlTablaContenedor.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Inicializamos y estilizamos la tabla
+        tablaVentas = new JTable();
+        estilizarTabla(tablaVentas);
+
+        // Datos en blanco por defecto al abrir
+        String[] columnas = {"No. Factura", "Fecha y Hora", "Cliente", "Cajero", "Total (L.)"};
+        DefaultTableModel modeloInicial = new DefaultTableModel(null, columnas);
+        tablaVentas.setModel(modeloInicial);
+
+        JScrollPane scrollTabla = new JScrollPane(tablaVentas);
+        scrollTabla.setBorder(BorderFactory.createEmptyBorder()); 
+        scrollTabla.getViewport().setBackground(Color.WHITE);
+        
+        pnlTablaContenedor.add(scrollTabla, BorderLayout.CENTER);
+
+        // Franja del Total (Parte inferior de la tabla)
+        JPanel pnlTotal = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        pnlTotal.setBackground(Color.WHITE);
+        pnlTotal.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(2, 0, 0, 0, new Color(241, 245, 249)), // Línea superior suave
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+
+        lblTotal = new JLabel("Total de Ingresos: L. 0.00");
+        lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 26)); // Letra grande para destacar el dinero
+        lblTotal.setForeground(accentBlue); // Color vibrante para el dinero
+
+        pnlTotal.add(lblTotal);
+        pnlTablaContenedor.add(pnlTotal, BorderLayout.SOUTH);
+
+        pnlCentro.add(pnlTablaContenedor, BorderLayout.CENTER);
+
+        add(pnlCentro, BorderLayout.CENTER);
+    }
+
+    // ==========================================
+    // ESTILOS VISUALES (Spinners y Tabla)
+    // ==========================================
+    private void estilizarSpinner(JSpinner spinner) {
+        spinner.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        spinner.setPreferredSize(new Dimension(180, 35));
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            JTextField txt = ((JSpinner.DefaultEditor) editor).getTextField();
+            txt.setForeground(textDark);
+            txt.setFont(new Font("Segoe UI", Font.BOLD, 15));
+            txt.setHorizontalAlignment(SwingConstants.CENTER);
+        }
+    }
+
+    private void estilizarTabla(JTable tabla) {
+        tabla.setBackground(Color.WHITE);
+        tabla.setForeground(textDark);
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tabla.setRowHeight(40); 
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new Color(241, 245, 249)); 
+        tabla.setSelectionBackground(new Color(239, 246, 255));
+        tabla.setSelectionForeground(brandDarkBlue);
+
+        JTableHeader header = tabla.getTableHeader();
+        header.setBackground(Color.WHITE);
+        header.setForeground(textMuted);
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setPreferredSize(new Dimension(header.getWidth(), 45));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(226, 232, 240)));
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        tabla.setDefaultRenderer(Object.class, centerRenderer); // Centramos todo por estética
+    }
+
+    // ==========================================
+    // LÓGICA DE BASE DE DATOS (Intacta)
+    // ==========================================
+    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // Capturar las fechas
+        java.util.Date fechaDesde = (java.util.Date) txtDesde.getValue();
+        java.util.Date fechaHasta = (java.util.Date) txtHasta.getValue();
+
+        // Validación básica
+        if (fechaDesde.after(fechaHasta)) {
+            JOptionPane.showMessageDialog(this, "La Fecha de Inicio no puede ser mayor a la Fecha de Fin.", "Error en Fechas", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Preparar modelo
+        String[] columnas = {"No. Factura", "Fecha y Hora", "Cliente", "Cajero", "Total (L.)"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+
+        // Consultar Base de Datos
+        List<Object[]> listaVentas = new VentaDAO().reporteVentasPorFecha(fechaDesde, fechaHasta);
+
+        double granTotal = 0.0;
+
+        // Llenar tabla
+        for (Object[] fila : listaVentas) {
+            double totalFactura = (double) fila[4];
+            granTotal += totalFactura; 
+            
+            fila[4] = "L. " + String.format("%,.2f", totalFactura); 
+            modelo.addRow(fila);
+        }
+
+        tablaVentas.setModel(modelo);
+
+        // Actualizar el Gran Total
+        lblTotal.setText("Total de Ingresos: L. " + String.format("%,.2f", granTotal));
+        
+        if (listaVentas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron ventas en este rango de fechas.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }                                          
+
+    // ==========================================
+    // CLASE AUXILIAR: PANEL CON ESQUINAS REDONDEADAS
+    // ==========================================
+    class PanelRedondeado extends JPanel {
+        private int radio;
+
+        public PanelRedondeado(int radio) {
+            this.radio = radio;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            g2.setColor(Color.WHITE);
+            g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), radio, radio));
+            
+            g2.dispose();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -18,106 +275,18 @@ public class ReporteVentasFecha extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaVentas = new javax.swing.JTable();
-        jLabel9 = new javax.swing.JLabel();
-        txtDesde = new javax.swing.JSpinner();
-        jLabel10 = new javax.swing.JLabel();
-        txtHasta = new javax.swing.JSpinner();
-        btnGenerar = new javax.swing.JButton();
-        lblTotal = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel7.setFont(new java.awt.Font("Franklin Gothic Book", 1, 28)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 56, 78));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("REPORTE DE VENTAS (CORTE DE CAJA)");
-
-        tablaVentas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tablaVentas);
-
-        jLabel9.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 56, 78));
-        jLabel9.setText("Dedes:");
-
-        txtDesde.setFont(new java.awt.Font("Franklin Gothic Book", 0, 16)); // NOI18N
-        txtDesde.setModel(new javax.swing.SpinnerDateModel());
-        txtDesde.addChangeListener(this::txtDesdeStateChanged);
-
-        jLabel10.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 56, 78));
-        jLabel10.setText("Hasta:");
-
-        txtHasta.setFont(new java.awt.Font("Franklin Gothic Book", 0, 16)); // NOI18N
-        txtHasta.setModel(new javax.swing.SpinnerDateModel());
-        txtHasta.addChangeListener(this::txtHastaStateChanged);
-
-        btnGenerar.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
-        btnGenerar.setForeground(new java.awt.Color(0, 56, 78));
-        btnGenerar.setText("Generar Reporte");
-        btnGenerar.addActionListener(this::btnGenerarActionPerformed);
-
-        lblTotal.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
-        lblTotal.setForeground(new java.awt.Color(0, 56, 78));
-        lblTotal.setText("Total de Ingresos: L. 0.00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTotal)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(135, 135, 135))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGap(0, 1374, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel7)
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerar))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblTotal)
-                .addContainerGap(82, Short.MAX_VALUE))
+            .addGap(0, 1053, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -142,72 +311,8 @@ public class ReporteVentasFecha extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDesdeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtDesdeStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDesdeStateChanged
-
-    private void txtHastaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtHastaStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtHastaStateChanged
-
-    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        // TODO add your handling code here:
-        
-        //Capturar las fechas de los JSpinner
-        java.util.Date fechaDesde = (java.util.Date) txtDesde.getValue();
-        java.util.Date fechaHasta = (java.util.Date) txtHasta.getValue();
-
-        // Validación básica: "Desde" no puede ser mayor que "Hasta"
-        if (fechaDesde.after(fechaHasta)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "La Fecha de Inicio no puede ser mayor a la Fecha de Fin.", "Error en Fechas", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        //Preparar el modelo de la tabla
-        String[] columnas = {"No. Factura", "Fecha y Hora", "Cliente", "Cajero", "Total (L.)"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; 
-            }
-        };
-
-        //Llamar al motor de la base de datos
-        List<Object[]> listaVentas = new VentaDAO().reporteVentasPorFecha(fechaDesde, fechaHasta);
-
-        double granTotal = 0.0;
-
-        //Llenar la tabla visual y sumar el dinero
-        for (Object[] fila : listaVentas) {
-            // Re-formatear el dinero para que se vea bonito en la tabla
-            double totalFactura = (double) fila[4];
-            granTotal += totalFactura; // Vamos sumando al acumulado general
-            
-            fila[4] = "L. " + String.format("%,.2f", totalFactura); 
-            modelo.addRow(fila);
-        }
-
-        tablaVentas.setModel(modelo);
-
-        //Mostrar el Gran Total en la etiqueta gigante de abajo
-        lblTotal.setText("Total de Ingresos: L. " + String.format("%,.2f", granTotal));
-        
-        if (listaVentas.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "No se encontraron ventas en este rango de fechas.", "Sin Resultados", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_btnGenerarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGenerar;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTotal;
-    private javax.swing.JTable tablaVentas;
-    private javax.swing.JSpinner txtDesde;
-    private javax.swing.JSpinner txtHasta;
     // End of variables declaration//GEN-END:variables
 }

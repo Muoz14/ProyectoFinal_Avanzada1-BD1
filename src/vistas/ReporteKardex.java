@@ -1,33 +1,251 @@
 package vistas;
 
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 public class ReporteKardex extends javax.swing.JPanel {
     
-    // Esta lista guardara todos los movimientos (entradas y salidas) originales
+    // Lógica Original
     private java.util.List<Object[]> todoElHistorial = new java.util.ArrayList<>();
     
-    // --- VARIABLES FANTASMAS PARA PRODUCTO ---
-    private javax.swing.JPopupMenu popupProducto;
-    private javax.swing.JTable tablaPopupProd;
-    private javax.swing.table.DefaultTableModel modeloPopupProd;
+    // Variables Fantasmas
+    private JPopupMenu popupProducto;
+    private JTable tablaPopupProd;
+    private DefaultTableModel modeloPopupProd;
     private java.util.List<entity.Producto> listaProdCache;
     private entity.Producto productoSeleccionado = null;
 
+    // Componentes Visuales
+    private JTextField txtBuscarProductos;
+    private JCheckBox chkEntradas;
+    private JCheckBox chkSalidas;
+    private JButton btnGenerarKardex;
+    private JTable tablaKardex;
+
+    // Paleta de colores Soft UI
+    private final Color bgApp = new Color(240, 244, 248); 
+    private final Color textDark = new Color(30, 41, 59); 
+    private final Color textMuted = new Color(100, 116, 139); 
+    private final Color brandDarkBlue = Color.decode("#00384E");
+
     public ReporteKardex() {
-        initComponents();
+        initComponentsPremium();
         prepararBuscadorProducto();
     }
-    
-    // MOTOR DE BUSQUEDA FANTASMA (PRODUCTOS)
-    private void prepararBuscadorProducto() {
-        popupProducto = new javax.swing.JPopupMenu();
-        popupProducto.setFocusable(false);
+
+    private void initComponentsPremium() {
+        setBackground(bgApp);
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50)); 
+
+        // ==========================================
+        // 1. ENCABEZADO
+        // ==========================================
+        JPanel pnlTitulos = new JPanel();
+        pnlTitulos.setLayout(new BoxLayout(pnlTitulos, BoxLayout.Y_AXIS));
+        pnlTitulos.setBackground(bgApp);
+        pnlTitulos.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
+        JLabel lblTitulo = new JLabel("Kardex de Producto");
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 38));
+        lblTitulo.setForeground(textDark);
+
+        JLabel lblSubtitulo = new JLabel("Historial detallado de entradas y salidas de inventario");
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        lblSubtitulo.setForeground(textMuted);
+
+        pnlTitulos.add(lblTitulo);
+        pnlTitulos.add(Box.createVerticalStrut(5));
+        pnlTitulos.add(lblSubtitulo);
+
+        add(pnlTitulos, BorderLayout.NORTH);
+
+        // ==========================================
+        // 2. CONTENIDO CENTRAL
+        // ==========================================
+        JPanel pnlCentro = new JPanel(new BorderLayout(0, 20)); 
+        pnlCentro.setBackground(bgApp);
+
+        // --- TARJETA DE CONTROLES ---
+        PanelRedondeado pnlControles = new PanelRedondeado(25);
+        pnlControles.setLayout(new GridBagLayout());
+        pnlControles.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Etiqueta
+        JLabel lblProductos = new JLabel("Buscar Producto:");
+        lblProductos.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblProductos.setForeground(textMuted);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.0;
+        pnlControles.add(lblProductos, gbc);
+
+        // Buscador
+        txtBuscarProductos = new JTextField();
+        txtBuscarProductos.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        txtBuscarProductos.setForeground(textDark);
+        txtBuscarProductos.setPreferredSize(new Dimension(300, 40));
+        txtBuscarProductos.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(203, 213, 225), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        txtBuscarProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtBuscarProductosMouseClicked(evt);
+            }
+        });
+        txtBuscarProductos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent evt) {
+                txtBuscarProductosKeyReleased(evt);
+            }
+        });
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        pnlControles.add(txtBuscarProductos, gbc);
+
+        // Separador
+        gbc.gridx = 2; gbc.weightx = 0.5;
+        pnlControles.add(Box.createHorizontalGlue(), gbc);
+
+        // Checkboxes
+        chkEntradas = new JCheckBox("Entradas");
+        estilizarCheckbox(chkEntradas);
+        chkEntradas.setSelected(true); // Seleccionado por defecto
+        chkEntradas.addActionListener(e -> filtrarTablaKardex());
+        gbc.gridx = 3; gbc.weightx = 0.0;
+        pnlControles.add(chkEntradas, gbc);
+
+        chkSalidas = new JCheckBox("Salidas");
+        estilizarCheckbox(chkSalidas);
+        chkSalidas.setSelected(true); // Seleccionado por defecto
+        chkSalidas.addActionListener(e -> filtrarTablaKardex());
+        gbc.gridx = 4;
+        pnlControles.add(chkSalidas, gbc);
+
+        // Botón Ver Historial
+        btnGenerarKardex = new JButton("Ver Historial");
+        btnGenerarKardex.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnGenerarKardex.setBackground(brandDarkBlue);
+        btnGenerarKardex.setForeground(Color.WHITE);
+        btnGenerarKardex.setFocusPainted(false);
+        btnGenerarKardex.setBorderPainted(false);
+        btnGenerarKardex.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnGenerarKardex.setPreferredSize(new Dimension(160, 40));
+        btnGenerarKardex.addActionListener(e -> btnGenerarKardexActionPerformed());
+        gbc.gridx = 5; gbc.insets = new Insets(0, 30, 0, 10);
+        pnlControles.add(btnGenerarKardex, gbc);
+
+        pnlCentro.add(pnlControles, BorderLayout.NORTH);
+
+        // --- TARJETA DE LA TABLA ---
+        PanelRedondeado pnlTablaContenedor = new PanelRedondeado(25);
+        pnlTablaContenedor.setLayout(new BorderLayout());
+        pnlTablaContenedor.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        tablaKardex = new JTable();
+        estilizarTabla(tablaKardex);
         
-        modeloPopupProd = new javax.swing.table.DefaultTableModel(null, new String[]{"ID", "Producto", "Stock"}) {
+        // Iniciamos la tabla vacía con los títulos
+        String[] columnas = {"Fecha y Hora", "Ref/Factura", "Tipo Movimiento", "Cant.", "Responsable"};
+        tablaKardex.setModel(new DefaultTableModel(null, columnas));
+
+        JScrollPane scrollTabla = new JScrollPane(tablaKardex);
+        scrollTabla.setBorder(BorderFactory.createEmptyBorder()); 
+        scrollTabla.getViewport().setBackground(Color.WHITE);
+        
+        pnlTablaContenedor.add(scrollTabla, BorderLayout.CENTER);
+
+        pnlCentro.add(pnlTablaContenedor, BorderLayout.CENTER);
+
+        add(pnlCentro, BorderLayout.CENTER);
+    }
+
+    // ==========================================
+    // ESTILOS VISUALES
+    // ==========================================
+    private void estilizarCheckbox(JCheckBox chk) {
+        chk.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        chk.setForeground(textDark);
+        chk.setBackground(Color.WHITE);
+        chk.setFocusPainted(false);
+        chk.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    private void estilizarTabla(JTable tabla) {
+        tabla.setBackground(Color.WHITE);
+        tabla.setForeground(textDark);
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tabla.setRowHeight(40); 
+        tabla.setShowVerticalLines(false);
+        tabla.setShowHorizontalLines(true);
+        tabla.setGridColor(new Color(241, 245, 249)); 
+        tabla.setSelectionBackground(new Color(239, 246, 255));
+        tabla.setSelectionForeground(brandDarkBlue);
+
+        JTableHeader header = tabla.getTableHeader();
+        header.setBackground(Color.WHITE);
+        header.setForeground(textMuted);
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setPreferredSize(new Dimension(header.getWidth(), 45));
+        header.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(226, 232, 240)));
+
+        // Renderer Personalizado para pintar "Entradas" de Verde y "Salidas" de Rojo
+        DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                // Centramos el texto
+                setHorizontalAlignment(SwingConstants.CENTER);
+                
+                if (!isSelected) {
+                    String tipoMovimiento = table.getValueAt(row, 2).toString().toUpperCase();
+                    if (tipoMovimiento.contains("ENTRADA")) {
+                        c.setForeground(new Color(16, 185, 129)); // Verde
+                    } else if (tipoMovimiento.contains("VENTA") || tipoMovimiento.contains("SALIDA")) {
+                        c.setForeground(new Color(239, 68, 68)); // Rojo
+                    } else {
+                        c.setForeground(textDark);
+                    }
+                }
+                return c;
+            }
+        };
+
+        tabla.setDefaultRenderer(Object.class, customRenderer);
+    }
+
+    // ==========================================
+    // LÓGICA DE BUSCADOR FANTASMA
+    // ==========================================
+    private void prepararBuscadorProducto() {
+        popupProducto = new JPopupMenu();
+        popupProducto.setFocusable(false);
+        popupProducto.setBorder(BorderFactory.createLineBorder(new Color(203, 213, 225)));
+        
+        modeloPopupProd = new DefaultTableModel(null, new String[]{"ID", "Producto", "Stock"}) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        tablaPopupProd = new javax.swing.JTable(modeloPopupProd);
+        tablaPopupProd = new JTable(modeloPopupProd);
         
-        // EVENTO CLIC EN LA TABLA FANTASMA
+        // Estilo rápido a la tabla fantasma
+        tablaPopupProd.setRowHeight(30);
+        tablaPopupProd.setShowVerticalLines(false);
+        tablaPopupProd.setSelectionBackground(new Color(239, 246, 255));
+        tablaPopupProd.setSelectionForeground(brandDarkBlue);
+        tablaPopupProd.getTableHeader().setBackground(Color.WHITE);
+        
         tablaPopupProd.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -36,11 +254,11 @@ public class ReporteKardex extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(tablaPopupProd);
-        scroll.setPreferredSize(new java.awt.Dimension(350, 150));
+        JScrollPane scroll = new JScrollPane(tablaPopupProd);
+        scroll.setPreferredSize(new Dimension(350, 150));
+        scroll.setBorder(BorderFactory.createEmptyBorder());
         popupProducto.add(scroll);
         
-        // Cargamos la cache
         actualizarCacheProductos();
     }
 
@@ -67,186 +285,16 @@ public class ReporteKardex extends javax.swing.JPanel {
             }
         }
     }
-    
-    // LOGICA DEL REPORTE KARDEX
-    private void filtrarTablaKardex() {
-        String[] columnas = {"Fecha y Hora", "Ref/Factura", "Tipo Movimiento", "Cant.", "Responsable"};
-        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(null, columnas) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
-        };
 
-        // Leemos el estado de los Checkbox
-        boolean verEntradas = chkEntradas.isSelected();
-        boolean verSalidas = chkSalidas.isSelected();
-
-        for (Object[] fila : todoElHistorial) {
-            String tipo = fila[2].toString().toUpperCase(); // Columna de "Tipo Movimiento"
-
-            // Verificamos si la fila es Entrada o Salida (Venta)
-            boolean esEntrada = tipo.contains("ENTRADA");
-            boolean esSalida = tipo.contains("VENTA") || tipo.contains("SALIDA");
-
-            // Logica de visualizacion
-            if ((esEntrada && verEntradas) || (esSalida && verSalidas)) {
-                modelo.addRow(fila);
-            }
-        }
-        tablaKardex.setModel(modelo);
-    }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaKardex = new javax.swing.JTable();
-        jLabel9 = new javax.swing.JLabel();
-        btnGenerarKardex = new javax.swing.JButton();
-        chkSalidas = new javax.swing.JCheckBox();
-        chkEntradas = new javax.swing.JCheckBox();
-        txtBuscarProductos = new javax.swing.JTextField();
-
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel7.setFont(new java.awt.Font("Franklin Gothic Book", 1, 28)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 56, 78));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("KARDEX / HISTORIAL DE PRODUCTO");
-
-        tablaKardex.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tablaKardex);
-
-        jLabel9.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 56, 78));
-        jLabel9.setText("Productos: ");
-
-        btnGenerarKardex.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
-        btnGenerarKardex.setForeground(new java.awt.Color(0, 56, 78));
-        btnGenerarKardex.setText("Ver Historial");
-        btnGenerarKardex.addActionListener(this::btnGenerarKardexActionPerformed);
-
-        chkSalidas.setFont(new java.awt.Font("Franklin Gothic Book", 0, 16)); // NOI18N
-        chkSalidas.setForeground(new java.awt.Color(0, 56, 78));
-        chkSalidas.setText("Mostrar Salidas");
-        chkSalidas.addActionListener(this::chkSalidasActionPerformed);
-
-        chkEntradas.setFont(new java.awt.Font("Franklin Gothic Book", 0, 16)); // NOI18N
-        chkEntradas.setForeground(new java.awt.Color(0, 56, 78));
-        chkEntradas.setText("Mostrar Entradas");
-        chkEntradas.addActionListener(this::chkEntradasActionPerformed);
-
-        txtBuscarProductos.setFont(new java.awt.Font("Franklin Gothic Book", 0, 16)); // NOI18N
-        txtBuscarProductos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtBuscarProductosMouseClicked(evt);
-            }
-        });
-        txtBuscarProductos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBuscarProductosKeyReleased(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(135, 135, 135))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBuscarProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addComponent(chkEntradas)
-                .addGap(18, 18, 18)
-                .addComponent(chkSalidas)
-                .addGap(209, 209, 209)
-                .addComponent(btnGenerarKardex, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel7)
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(btnGenerarKardex)
-                    .addComponent(chkSalidas)
-                    .addComponent(chkEntradas)
-                    .addComponent(txtBuscarProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
-        );
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnGenerarKardexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarKardexActionPerformed
-        // TODO add your handling code here:
-        if (productoSeleccionado == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un producto primero.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Consultar la base de datos y guardar en nuestra variable global usando la entidad
-        todoElHistorial = new dao.ProductoDAO().historialKardexProducto(productoSeleccionado.getIdProducto());
-
-        // Llamar al filtro para que pinte la tabla por primera vez
-        filtrarTablaKardex();
-        
-        // Si no hay datos, mostramos un aviso
-        if (todoElHistorial.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Este producto no tiene movimientos registrados.", "Sin Datos", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_btnGenerarKardexActionPerformed
-
-    private void chkEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEntradasActionPerformed
-        // TODO add your handling code here:
-        filtrarTablaKardex();
-    }//GEN-LAST:event_chkEntradasActionPerformed
-
-    private void chkSalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSalidasActionPerformed
-        // TODO add your handling code here:
-        filtrarTablaKardex();
-    }//GEN-LAST:event_chkSalidasActionPerformed
-
-    private void txtBuscarProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuscarProductosMouseClicked
-        // TODO add your handling code here:
+    private void txtBuscarProductosMouseClicked(MouseEvent evt) {                                                
         String texto = txtBuscarProductos.getText().trim();
         filtrarProducto(texto); 
         if (modeloPopupProd.getRowCount() > 0) {
             popupProducto.show(txtBuscarProductos, 0, txtBuscarProductos.getHeight());
         }
-    }//GEN-LAST:event_txtBuscarProductosMouseClicked
+    }                                               
 
-    private void txtBuscarProductosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProductosKeyReleased
-        // TODO add your handling code here:
+    private void txtBuscarProductosKeyReleased(KeyEvent evt) {                                               
         String texto = txtBuscarProductos.getText().trim();
         if(texto.isEmpty()){ 
             productoSeleccionado = null; 
@@ -258,18 +306,95 @@ public class ReporteKardex extends javax.swing.JPanel {
         } else {
             popupProducto.setVisible(false);
         }
-    }//GEN-LAST:event_txtBuscarProductosKeyReleased
+    }
+
+    // ==========================================
+    // LÓGICA DE REPORTE (Intacta)
+    // ==========================================
+    private void btnGenerarKardexActionPerformed() {                                                 
+        if (productoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Debe buscar y seleccionar un producto primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        todoElHistorial = new dao.ProductoDAO().historialKardexProducto(productoSeleccionado.getIdProducto());
+        filtrarTablaKardex();
+        
+        if (todoElHistorial.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Este producto no tiene movimientos registrados.", "Sin Datos", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } 
+
+    private void filtrarTablaKardex() {
+        String[] columnas = {"Fecha y Hora", "Ref/Factura", "Tipo Movimiento", "Cant.", "Responsable"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+
+        boolean verEntradas = chkEntradas.isSelected();
+        boolean verSalidas = chkSalidas.isSelected();
+
+        for (Object[] fila : todoElHistorial) {
+            String tipo = fila[2].toString().toUpperCase(); 
+
+            boolean esEntrada = tipo.contains("ENTRADA");
+            boolean esSalida = tipo.contains("VENTA") || tipo.contains("SALIDA");
+
+            if ((esEntrada && verEntradas) || (esSalida && verSalidas)) {
+                modelo.addRow(fila);
+            }
+        }
+        tablaKardex.setModel(modelo);
+    }
+
+    // ==========================================
+    // CLASE AUXILIAR
+    // ==========================================
+    class PanelRedondeado extends JPanel {
+        private int radio;
+
+        public PanelRedondeado(int radio) {
+            this.radio = radio;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(Color.WHITE);
+            g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), radio, radio));
+            g2.dispose();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1374, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1048, Short.MAX_VALUE)
+        );
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+    }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGenerarKardex;
-    private javax.swing.JCheckBox chkEntradas;
-    private javax.swing.JCheckBox chkSalidas;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablaKardex;
-    private javax.swing.JTextField txtBuscarProductos;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,7 +4,6 @@ import gui.MenuPrincipal;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
 import vistas.PanelBienvenida;
-import vistas.ReporteBajoInventario;
 import vistas.ReporteComprasCliente;
 import vistas.ReporteKardex;
 import vistas.ReporteVentasFecha;
@@ -100,15 +99,15 @@ public class PanelReportes extends javax.swing.JPanel {
 
     private void btnBajoIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajoIActionPerformed
         // TODO add your handling code here:
-        Window window = SwingUtilities.getWindowAncestor(this);
-        if (window instanceof MenuPrincipal) {
-            MenuPrincipal menuBase = (MenuPrincipal) window;
-            
-            ReporteBajoInventario rBi = new ReporteBajoInventario();
-            menuBase.mostrarContenidoP(rBi);
-            
-            activarBoton(btnBajoI);
-        }
+//        Window window = SwingUtilities.getWindowAncestor(this);
+//        if (window instanceof MenuPrincipal) {
+//            MenuPrincipal menuBase = (MenuPrincipal) window;
+//            
+//            ReporteBajoStock rBi = new ReporteBajoStock();
+//            menuBase.mostrarContenidoP(rBi);
+//            
+//            activarBoton(btnBajoI);
+//        }
     }//GEN-LAST:event_btnBajoIActionPerformed
 
     private void btnKardexIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKardexIActionPerformed
