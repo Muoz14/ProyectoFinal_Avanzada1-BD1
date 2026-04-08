@@ -23,6 +23,11 @@ public class Inventario extends javax.swing.JPanel {
         prepararBuscadorFantasma();
         prepararBuscadorFantasmaEmpleado();
         cargarTabla();
+        
+        txtBuscarProductos.putClientProperty("JTextField.placeholderText", "Seleccione producto");
+        txtBuscarEmpleado.putClientProperty("JTextField.placeholderText", "Seleccione un empleado");
+        txtCantidad.putClientProperty("JTextField.placeholderText", "Ej: 10");
+        
     }
 
     //Metodo para cargar el historial en la tabla

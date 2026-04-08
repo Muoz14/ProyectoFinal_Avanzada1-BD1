@@ -11,6 +11,12 @@ public class GestionClientes extends javax.swing.JPanel {
         cargarTabla();
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
+        
+        txtNombre.putClientProperty("JTextField.placeholderText", "Nombre del cliente");
+        txtApellido.putClientProperty("JTextField.placeholderText", "Apellido del cliente");
+        txtTelefono.putClientProperty("JTextField.placeholderText", "Ej: 96007914");
+        txtCorreo.putClientProperty("JTextField.placeholderText", "Ej: ejemplo@gmail.com");
+        txtDireccion.putClientProperty("JTextField.placeholderText", "Ej: B. La Curva");
     }
     
     void limpiarCampos(){
@@ -366,9 +372,11 @@ public class GestionClientes extends javax.swing.JPanel {
             txtDireccion.setText(tablaClientes.getValueAt(fila, 5).toString());
             
             btnGuardar.setEnabled(false);
-            btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
+        }else{
+            btnEliminar.setEnabled(false);
         }
+        
 
     }//GEN-LAST:event_tablaClientesMouseClicked
 
@@ -508,6 +516,7 @@ public class GestionClientes extends javax.swing.JPanel {
             //Desactivamos los botones de Guardar y Modificar para no alterar registros borrados
             btnGuardar.setEnabled(false);
             btnModificar.setEnabled(false);
+            btnEliminar.setEnabled(true);
             btnEliminar.setText("RESTAURAR"); // Cambiamos el texto del botón Eliminar a Restaurar
             
         } else {
@@ -516,7 +525,7 @@ public class GestionClientes extends javax.swing.JPanel {
             
             // Volvemos a activar todo a la normalidad
             btnGuardar.setEnabled(true);
-            btnModificar.setEnabled(true);
+            btnEliminar.setEnabled(false);
             btnEliminar.setText("ELIMINAR");
         }         
     }//GEN-LAST:event_chkEliminadosActionPerformed

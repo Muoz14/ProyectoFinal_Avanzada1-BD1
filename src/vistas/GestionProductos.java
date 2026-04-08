@@ -11,6 +11,11 @@ public class GestionProductos extends javax.swing.JPanel {
         cargarTabla();
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
+        
+        txtNombre.putClientProperty("JTextField.placeholderText", "Nombre del nuevo producto");
+        txtPrecio.putClientProperty("JTextField.placeholderText", "Ej: 2500");
+        txtStockA.putClientProperty("JTextField.placeholderText", "Ej: 5");
+        txtDescrip.putClientProperty("JTextField.placeholderText", "Ej: Celular Gama Premium");
     }
     
     void limpiarCampos(){
@@ -434,8 +439,9 @@ public class GestionProductos extends javax.swing.JPanel {
             txtDescrip.setText(tablaProductos.getValueAt(fila, 4).toString());
             
             btnGuardar.setEnabled(false);
-            btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
+        }else{
+            btnEliminar.setEnabled(false);
         }
     }//GEN-LAST:event_tablaProductosMouseClicked
 
@@ -449,6 +455,7 @@ public class GestionProductos extends javax.swing.JPanel {
             //Desactivamos los botones de Guardar y Modificar para no alterar registros borrados
             btnGuardar.setEnabled(false);
             btnModificar.setEnabled(false);
+            btnEliminar.setEnabled(true);
             btnEliminar.setText("RESTAURAR"); // Cambiamos el texto del botón Eliminar a Restaurar
 
         } else {
@@ -457,7 +464,7 @@ public class GestionProductos extends javax.swing.JPanel {
 
             // Volvemos a activar todo a la normalidad
             btnGuardar.setEnabled(true);
-            btnModificar.setEnabled(true);
+            btnEliminar.setEnabled(false);
             btnEliminar.setText("ELIMINAR");
         }
     }//GEN-LAST:event_chkEliminadosActionPerformed
