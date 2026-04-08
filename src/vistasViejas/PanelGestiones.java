@@ -1,9 +1,15 @@
-package vistas;
+package vistasViejas;
 
 import gui.MenuPrincipal;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
 import vistas.*;
+import vistas.GestionClientes;
+import vistas.GestionProductos;
+import vistas.GestionUsuarios;
+import vistas.GestionVentas;
+import vistas.Inventario;
+import vistas.PanelBienvenida;
 
 public class PanelGestiones extends javax.swing.JPanel {
 

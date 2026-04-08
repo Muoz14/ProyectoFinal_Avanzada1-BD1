@@ -1,8 +1,13 @@
-package vistas;
+package vistasViejas;
 
 import gui.MenuPrincipal;
 import java.awt.Window;
 import javax.swing.SwingUtilities;
+import vistas.PanelBienvenida;
+import vistas.ReporteBajoInventario;
+import vistas.ReporteComprasCliente;
+import vistas.ReporteKardex;
+import vistas.ReporteVentasFecha;
 
 
 public class PanelReportes extends javax.swing.JPanel {

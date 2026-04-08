@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,9 +22,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-public class PanelG extends javax.swing.JPanel {
+public class PanelG extends JPanel {
     
-    // Componentes del Menú
+    // Componentes del Menú de Gestiones
     private JButton btnGclientes;
     private JButton btnGproductos;
     private JButton btnGventas;
@@ -41,22 +42,22 @@ public class PanelG extends javax.swing.JPanel {
     }
     
     // =========================================================
-    // 1. EL REINICIO VISUAL FORZADO (Mata el efecto fantasma)
+    // 1. EL REINICIO VISUAL BLINDADO
     // =========================================================
     private void activarBoton(JButton botonActivo) {
-        // Metemos todos los botones de navegación en un arreglo
         JButton[] botones = {btnGclientes, btnGproductos, btnGventas, btnInventario, btnGusuarios};
         
         for (JButton b : botones) {
             b.setEnabled(true);
-            // FORZAMOS EL REINICIO VISUAL a la posición 25 original
-            b.putClientProperty("JTextField.padding", new Insets(10, 25, 10, 20)); 
+            b.putClientProperty("isHovered", false); 
+            b.setIconTextGap(20); // Regresa el texto a su lugar
             b.setBorderPainted(false);
             b.setContentAreaFilled(false);
         }
 
-        // Apagamos SOLO el botón presionado
         botonActivo.setEnabled(false);
+        botonActivo.putClientProperty("isHovered", false);
+        botonActivo.setIconTextGap(20);
     }
 
     private void initComponentsPremium() {
@@ -80,10 +81,10 @@ public class PanelG extends javax.swing.JPanel {
         gbcHeader.anchor = GridBagConstraints.CENTER;
 
         JLabel lblTitulo = new JLabel("GESTIONES");
-        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 42)); // Título monumental
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 42)); 
         lblTitulo.setForeground(brandLight);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        gbcHeader.insets = new Insets(60, 0, 10, 0); // Margen superior
+        gbcHeader.insets = new Insets(60, 0, 10, 0); 
         pnlHeader.add(lblTitulo, gbcHeader);
 
         JLabel lblSub = new JLabel("MÓDULOS DEL SISTEMA");
@@ -98,7 +99,7 @@ public class PanelG extends javax.swing.JPanel {
         add(pnlHeader, gbc);
 
         // =========================================================
-        // 2. LISTA DE BOTONES DE GESTIÓN
+        // 2. LISTA DE BOTONES DE GESTIÓN (Puro Texto)
         // =========================================================
         JPanel pnlMenu = new JPanel(new GridBagLayout());
         pnlMenu.setBackground(brandDarkBlue);
@@ -107,29 +108,28 @@ public class PanelG extends javax.swing.JPanel {
         gbcMenu.weightx = 1.0;
         gbcMenu.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- BOTONES ---
-        btnGclientes = crearBotonMenu("Gestión de Clientes", "/recursos/icon_clientes.png");
+        btnGclientes = crearBotonMenu("Gestión de Clientes");
         btnGclientes.addActionListener(this::btnGclientesActionPerformed);
         gbcMenu.insets = new Insets(0, 20, 10, 20);
         gbcMenu.gridy = 0;
         pnlMenu.add(btnGclientes, gbcMenu);
 
-        btnGproductos = crearBotonMenu("Gestión de Productos", "/recursos/icon_productos.png");
+        btnGproductos = crearBotonMenu("Gestión de Productos");
         btnGproductos.addActionListener(this::btnGproductosActionPerformed);
         gbcMenu.gridy = 1;
         pnlMenu.add(btnGproductos, gbcMenu);
 
-        btnGventas = crearBotonMenu("Gestión de Ventas", "/recursos/icon_ventas.png");
+        btnGventas = crearBotonMenu("Gestión de Ventas");
         btnGventas.addActionListener(this::btnGventasActionPerformed);
         gbcMenu.gridy = 2;
         pnlMenu.add(btnGventas, gbcMenu);
 
-        btnInventario = crearBotonMenu("Inventario", "/recursos/icon_inventario.png");
+        btnInventario = crearBotonMenu("Inventario");
         btnInventario.addActionListener(this::btnInventarioActionPerformed);
         gbcMenu.gridy = 3;
         pnlMenu.add(btnInventario, gbcMenu);
 
-        btnGusuarios = crearBotonMenu("Gestión de Usuarios", "/recursos/icon_usuarios.png");
+        btnGusuarios = crearBotonMenu("Gestión de Usuarios");
         btnGusuarios.addActionListener(this::btnGusuariosActionPerformed);
         gbcMenu.gridy = 4;
         pnlMenu.add(btnGusuarios, gbcMenu);
@@ -138,7 +138,7 @@ public class PanelG extends javax.swing.JPanel {
         add(pnlMenu, gbc);
 
         // =========================================================
-        // 3. ESPACIADOR (Empuja el botón regresar al fondo)
+        // 3. ESPACIADOR
         // =========================================================
         gbc.gridy = 2;
         gbc.weighty = 1.0; 
@@ -147,34 +147,32 @@ public class PanelG extends javax.swing.JPanel {
         // =========================================================
         // 4. BOTÓN REGRESAR AL MENÚ PRINCIPAL
         // =========================================================
-        btnRegresar = crearBotonMenu("Regresar al Menú", "/recursos/icon_back.png");
-        btnRegresar.setForeground(new Color(255, 200, 100)); // Naranja/dorado
+        btnRegresar = crearBotonMenu("Regresar al Menú");
+        btnRegresar.setForeground(new Color(255, 200, 100)); 
         btnRegresar.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnRegresar.addActionListener(this::btnRegresarActionPerformed);
         
         gbc.gridy = 3;
         gbc.weighty = 0.0;
-        // Botón subido a 100px para que no pegue abajo
-        gbc.insets = new Insets(0, 20, 100, 20); 
+        gbc.insets = new Insets(0, 20, 100, 20); // Subido a 100px
         add(btnRegresar, gbc);
     }
 
     // =========================================================
-    // 2. EL MOTOR DE ANIMACIÓN BLINDADO
+    // 2. MOTOR DE ANIMACIÓN (EL TRUCO DEL PIXEL INVISIBLE)
     // =========================================================
-    private JButton crearBotonMenu(String texto, String rutaIcono) {
+    private JButton crearBotonMenu(String texto) {
         JButton boton = new JButton(texto);
         
-        try {
-            ImageIcon originalIcon = new ImageIcon(getClass().getResource(rutaIcono));
-            Image scaledImage = originalIcon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-            boton.setIcon(new ImageIcon(scaledImage));
-        } catch (Exception e) {}
+        // TRUCO MAESTRO: Imagen invisible para que el IconTextGap funcione siempre
+        BufferedImage imgInvisible = new BufferedImage(1, 24, BufferedImage.TYPE_INT_ARGB);
+        boton.setIcon(new ImageIcon(imgInvisible));
 
         boton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         boton.setForeground(brandLight);
         boton.setHorizontalAlignment(SwingConstants.LEADING); 
         boton.setHorizontalTextPosition(SwingConstants.RIGHT); 
+        
         boton.setIconTextGap(20); 
 
         boton.setBorderPainted(false);
@@ -183,63 +181,55 @@ public class PanelG extends javax.swing.JPanel {
         boton.putClientProperty("JButton.buttonType", "roundRect");
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Posición original de inicio (25px a la izquierda)
-        boton.putClientProperty("JTextField.padding", new Insets(10, 25, 10, 20));
+        boton.putClientProperty("JTextField.padding", new Insets(10, 20, 10, 20));
 
-        // Animación "Bulletproof" (A prueba de movimientos rápidos)
+        Timer animTimer = new Timer(10, null);
+        animTimer.addActionListener(e -> {
+            int currentGap = boton.getIconTextGap();
+            boolean hovered = boton.getClientProperty("isHovered") != null && (boolean) boton.getClientProperty("isHovered");
+            int targetGap = hovered ? 40 : 20;
+
+            if (currentGap < targetGap) {
+                boton.setIconTextGap(currentGap + 2); 
+            } else if (currentGap > targetGap) {
+                boton.setIconTextGap(currentGap - 2); 
+            } else {
+                animTimer.stop(); 
+            }
+        });
+
         boton.addMouseListener(new MouseAdapter() {
-            Timer animTimer;
-            int paddingIzq = 25;
-            boolean isHovered = false;
-
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (!boton.isEnabled()) return; // Si está apagado, lo ignoramos por completo
+                if (!boton.isEnabled()) return; 
                 
-                isHovered = true;
+                boton.putClientProperty("isHovered", true);
                 boton.setBorderPainted(true);
                 boton.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, hoverBlue)); 
                 boton.setContentAreaFilled(true);
                 boton.setBackground(new Color(255, 255, 255, 15)); 
-                iniciarAnimacion();
+                animTimer.start(); 
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (!boton.isEnabled()) return; // Si está apagado, lo ignoramos
+                boton.putClientProperty("isHovered", false); 
                 
-                isHovered = false;
+                if (!boton.isEnabled()) return; 
+                
                 boton.setBorderPainted(false);
                 boton.setContentAreaFilled(false);
-                iniciarAnimacion();
-            }
-
-            private void iniciarAnimacion() {
-                if (animTimer != null && animTimer.isRunning()) return; // Previene choques de timers
-                
-                animTimer = new Timer(15, ae -> {
-                    if (isHovered && paddingIzq < 45) { // Va hacia la derecha
-                        paddingIzq += 2;
-                    } else if (!isHovered && paddingIzq > 25) { // Regresa hacia la izquierda
-                        paddingIzq -= 2;
-                    } else {
-                        animTimer.stop(); // Llegó a su destino
-                    }
-                    boton.putClientProperty("JTextField.padding", new Insets(10, paddingIzq, 10, 20));
-                    boton.revalidate();
-                });
-                animTimer.start();
+                animTimer.start(); 
             }
         });
 
         return boton;
     }
-
     // =========================================================
     // TU LÓGICA DE EVENTOS (Intacta)
     // =========================================================
 
-    private void btnGclientesActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnGclientesActionPerformed(java.awt.event.ActionEvent evt) {                                             
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -247,7 +237,7 @@ public class PanelG extends javax.swing.JPanel {
             menuBase.mostrarContenidoP(gC);
             activarBoton(btnGclientes);
         }
-    }                                             
+    }                                            
 
     private void btnGproductosActionPerformed(java.awt.event.ActionEvent evt) {                                              
         Window window = SwingUtilities.getWindowAncestor(this);
@@ -269,7 +259,7 @@ public class PanelG extends javax.swing.JPanel {
         }
     }                                             
 
-    private void btnGusuariosActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnGusuariosActionPerformed(java.awt.event.ActionEvent evt) {                                             
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -279,7 +269,7 @@ public class PanelG extends javax.swing.JPanel {
         }
     }                                             
 
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -290,9 +280,9 @@ public class PanelG extends javax.swing.JPanel {
             PanelBienvenida bienvenida = new PanelBienvenida();
             menuBase.mostrarContenidoP(bienvenida);
         }
-    }                                            
+    }                                           
 
-    private void btnGventasActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void btnGventasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
@@ -301,7 +291,7 @@ public class PanelG extends javax.swing.JPanel {
             activarBoton(btnGventas);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

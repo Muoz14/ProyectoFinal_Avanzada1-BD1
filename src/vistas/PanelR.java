@@ -1,7 +1,6 @@
 package vistas;
 
 import gui.MenuPrincipal;
-import gui.LoginModerno;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -18,26 +17,46 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-public class PanelMPrincipal extends javax.swing.JPanel {
+public class PanelR extends javax.swing.JPanel {
     
-    // Componentes del Menú
-    private JButton btnGestiones;
-    private JButton btnReportes;
-    private JButton btnCerrarSesion;
+    // Componentes del Menú de Reportes
+    private JButton btnBajoI;
+    private JButton btnVentasPorF;
+    private JButton btnKardexI;
+    private JButton btnComprasC;
+    private JButton btnRegresar;
 
     // Colores base de la marca
     private final Color brandDarkBlue = Color.decode("#00384E");
     private final Color brandLight = Color.WHITE;
     private final Color hoverBlue = Color.decode("#005475");
 
-    public PanelMPrincipal() {
+    public PanelR() {
         initComponentsPremium();
+    }
+    
+    // =========================================================
+    // 1. EL REINICIO VISUAL BLINDADO
+    // =========================================================
+   private void activarBoton(JButton botonActivo) {
+        JButton[] botones = {btnBajoI, btnVentasPorF, btnKardexI, btnComprasC};
+        
+        for (JButton b : botones) {
+            b.setEnabled(true);
+            b.putClientProperty("isHovered", false); 
+            b.setIconTextGap(20); // Regresa el texto a su lugar
+            b.setBorderPainted(false);
+            b.setContentAreaFilled(false);
+        }
+
+        botonActivo.setEnabled(false);
+        botonActivo.putClientProperty("isHovered", false);
+        botonActivo.setIconTextGap(20);
     }
 
     private void initComponentsPremium() {
@@ -49,10 +68,9 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbc.gridx = 0; 
         gbc.weightx = 1.0; 
         gbc.fill = GridBagConstraints.HORIZONTAL; 
-        gbc.anchor = GridBagConstraints.NORTH; 
 
         // =========================================================
-        // 1. SECCIÓN SUPERIOR: ÁREA DE MARCA
+        // 1. HEADER: TÍTULO DE REPORTES
         // =========================================================
         JPanel pnlHeader = new JPanel(new GridBagLayout());
         pnlHeader.setBackground(brandDarkBlue);
@@ -60,42 +78,27 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcHeader.gridx = 0;
         gbcHeader.weightx = 1.0;
         gbcHeader.anchor = GridBagConstraints.CENTER;
-        
-        JLabel lblLogo = new JLabel();
-        try {
-            ImageIcon originalIcon = new ImageIcon(getClass().getResource("/recursos/apoloMenu.png"));
-            Image scaledImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-            lblLogo.setIcon(new ImageIcon(scaledImage));
-        } catch (Exception e) {
-            lblLogo.setText("APOLO");
-            lblLogo.setFont(new Font("Arial Black", Font.BOLD, 26));
-            lblLogo.setForeground(brandLight);
-        }
-        lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
-        gbcHeader.insets = new Insets(50, 0, 15, 0); 
-        pnlHeader.add(lblLogo, gbcHeader);
-        
-        JLabel lblApolo = new JLabel("APOLO");
-        lblApolo.setFont(new Font("Segoe UI", Font.BOLD, 48));
-        lblApolo.setForeground(brandLight);
-        lblApolo.setHorizontalAlignment(SwingConstants.CENTER);
-        gbcHeader.insets = new Insets(0, 0, 10, 0);
-        pnlHeader.add(lblApolo, gbcHeader);
 
-        JLabel lblSistema = new JLabel("SISTEMA DE GESTIÓN");
-        lblSistema.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        lblSistema.setForeground(new Color(255, 255, 255, 180)); 
-        lblSistema.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("REPORTES");
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 42)); 
+        lblTitulo.setForeground(brandLight);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        gbcHeader.insets = new Insets(60, 0, 10, 0); 
+        pnlHeader.add(lblTitulo, gbcHeader);
+
+        JLabel lblSub = new JLabel("MÓDULOS DE ANÁLISIS");
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblSub.setForeground(new Color(255, 255, 255, 180));
+        lblSub.setHorizontalAlignment(SwingConstants.CENTER);
         gbcHeader.insets = new Insets(0, 0, 40, 0); 
-        pnlHeader.add(lblSistema, gbcHeader);
+        pnlHeader.add(lblSub, gbcHeader);
 
         gbc.gridy = 0;
-        gbc.weighty = 0.0; 
-        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.NORTH;
         add(pnlHeader, gbc);
 
         // =========================================================
-        // 2. SECCIÓN CENTRAL: NAVEGACIÓN
+        // 2. LISTA DE BOTONES DE REPORTES (Puro Texto)
         // =========================================================
         JPanel pnlMenu = new JPanel(new GridBagLayout());
         pnlMenu.setBackground(brandDarkBlue);
@@ -103,83 +106,60 @@ public class PanelMPrincipal extends javax.swing.JPanel {
         gbcMenu.gridx = 0;
         gbcMenu.weightx = 1.0;
         gbcMenu.fill = GridBagConstraints.HORIZONTAL;
-        
-        Font sectionFont = new Font("Segoe UI", Font.BOLD, 14);
-        
-        // --- NAVEGACIÓN PRINCIPAL ---
-        JLabel lblSectionMain = new JLabel("MENÚ PRINCIPAL");
-        lblSectionMain.setFont(sectionFont);
-        lblSectionMain.setForeground(new Color(255, 255, 255, 150));
-        lblSectionMain.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 100))); 
-        gbcMenu.insets = new Insets(0, 20, 15, 20); 
+
+        btnBajoI = crearBotonMenu("Bajo Inventario");
+        btnBajoI.addActionListener(this::btnBajoIActionPerformed);
+        gbcMenu.insets = new Insets(0, 20, 10, 20);
         gbcMenu.gridy = 0;
-        pnlMenu.add(lblSectionMain, gbcMenu);
-        
-        // Botón Gestiones
-        btnGestiones = crearBotonMenu("Ir a Gestiones");
-        btnGestiones.addActionListener(this::btnGproductosActionPerformed);
-        gbcMenu.insets = new Insets(0, 20, 10, 20);
+        pnlMenu.add(btnBajoI, gbcMenu);
+
+        btnVentasPorF = crearBotonMenu("Ventas por Fecha");
+        btnVentasPorF.addActionListener(this::btnVentasPorFActionPerformed);
         gbcMenu.gridy = 1;
-        pnlMenu.add(btnGestiones, gbcMenu);
+        pnlMenu.add(btnVentasPorF, gbcMenu);
 
-        // Botón Reportes
-        btnReportes = crearBotonMenu("Ir a Reportes");
-        btnReportes.addActionListener(this::btnGusuarios1ActionPerformed);
+        btnKardexI = crearBotonMenu("Kardex de Inventario");
+        btnKardexI.addActionListener(this::btnKardexIActionPerformed);
         gbcMenu.gridy = 2;
-        pnlMenu.add(btnReportes, gbcMenu);
+        pnlMenu.add(btnKardexI, gbcMenu);
 
-        // Espaciador grande entre secciones
+        btnComprasC = crearBotonMenu("Compras por Cliente");
+        btnComprasC.addActionListener(this::btnComprasCActionPerformed);
         gbcMenu.gridy = 3;
-        gbcMenu.weighty = 0.0;
-        pnlMenu.add(javax.swing.Box.createVerticalStrut(30), gbcMenu);
-
-        // --- CUENTA ---
-        JLabel lblSectionAccount = new JLabel("CUENTA");
-        lblSectionAccount.setFont(sectionFont);
-        lblSectionAccount.setForeground(new Color(255, 255, 255, 150));
-        lblSectionAccount.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 100)));
-        gbcMenu.insets = new Insets(0, 20, 15, 20);
-        gbcMenu.gridy = 4;
-        pnlMenu.add(lblSectionAccount, gbcMenu);
-
-        // Botón Cerrar Sesión
-        btnCerrarSesion = crearBotonMenu("Cerrar Sesión");
-        btnCerrarSesion.setForeground(new Color(255, 90, 90)); 
-        btnCerrarSesion.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
-        gbcMenu.insets = new Insets(0, 20, 10, 20);
-        gbcMenu.gridy = 5;
-        pnlMenu.add(btnCerrarSesion, gbcMenu);
+        pnlMenu.add(btnComprasC, gbcMenu);
 
         gbc.gridy = 1;
-        gbc.weighty = 0.0;
         add(pnlMenu, gbc);
 
-        // Espaciador para copyright al fondo
+        // =========================================================
+        // 3. ESPACIADOR
+        // =========================================================
         gbc.gridy = 2;
         gbc.weighty = 1.0; 
         add(javax.swing.Box.createVerticalGlue(), gbc);
 
         // =========================================================
-        // 3. COPYRIGHT
+        // 4. BOTÓN REGRESAR AL MENÚ PRINCIPAL
         // =========================================================
-        JLabel lblCR = new JLabel("Copyright © Centro Apolo All rights reserved.");
-        lblCR.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblCR.setForeground(new Color(255, 255, 255, 100)); 
-        lblCR.setHorizontalAlignment(SwingConstants.CENTER);
+        btnRegresar = crearBotonMenu("Regresar al Menú");
+        btnRegresar.setForeground(new Color(255, 200, 100)); 
+        btnRegresar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnRegresar.addActionListener(this::btnRegresarActionPerformed);
+        
         gbc.gridy = 3;
         gbc.weighty = 0.0;
-        gbc.insets = new Insets(0, 20, 50, 20); 
-        add(lblCR, gbc);
+        gbc.insets = new Insets(0, 20, 100, 20); // Subido a 100px
+        add(btnRegresar, gbc);
     }
 
     // =========================================================
-    // MOTOR DE ANIMACIÓN INVENCIBLE (Pixel Invisible + Gap)
+    // 2. MOTOR DE ANIMACIÓN (SIN IMÁGENES EXTERNAS)
     // =========================================================
     private JButton crearBotonMenu(String texto) {
         JButton boton = new JButton(texto);
         
-        // TRUCO MAESTRO: Imagen invisible para que el IconTextGap funcione siempre
+        // TRUCO: Creamos una imagen invisible por código para que el 
+        // efecto IconTextGap funcione perfecto sin pedir archivos PNG.
         BufferedImage imgInvisible = new BufferedImage(1, 24, BufferedImage.TYPE_INT_ARGB);
         boton.setIcon(new ImageIcon(imgInvisible));
 
@@ -242,50 +222,60 @@ public class PanelMPrincipal extends javax.swing.JPanel {
     }
 
     // =========================================================
-    // TU LÓGICA DE NAVEGACIÓN Y ACCIONES EXACTAMENTE IGUAL
+    // TU LÓGICA DE EVENTOS ORIGINAL ADAPTADA
     // =========================================================
 
-    private void btnGproductosActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnBajoIActionPerformed(java.awt.event.ActionEvent evt) {                                         
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
-            PanelG pG = new PanelG();
-            menuBase.cambiarMenuIzquierdo(pG);
+            ReporteBajoInventario rBi = new ReporteBajoInventario();
+            menuBase.mostrarContenidoP(rBi);
+            activarBoton(btnBajoI);
         }
-    }                                             
+    }                                        
 
-    private void btnGusuarios1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void btnKardexIActionPerformed(java.awt.event.ActionEvent evt) {                                           
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof MenuPrincipal) {
             MenuPrincipal menuBase = (MenuPrincipal) window;
-            PanelR pR = new PanelR();
-            menuBase.cambiarMenuIzquierdo(pR);
+            ReporteKardex rK = new ReporteKardex();
+            menuBase.mostrarContenidoP(rK);
+            activarBoton(btnKardexI);
+        }
+    }                                          
+
+    private void btnVentasPorFActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MenuPrincipal) {
+            MenuPrincipal menuBase = (MenuPrincipal) window;
+            ReporteVentasFecha rVf = new ReporteVentasFecha();
+            menuBase.mostrarContenidoP(rVf);
+            activarBoton(btnVentasPorF);
         }
     }                                             
 
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {                                                
+    private void btnComprasCActionPerformed(java.awt.event.ActionEvent evt) {                                            
         Window window = SwingUtilities.getWindowAncestor(this);
-        
-        JLabel mensaje = new JLabel("¿Desea cerrar la sesión actual?");
-        mensaje.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        mensaje.setPreferredSize(new Dimension(300, 30)); 
-        
-        int opcion = JOptionPane.showConfirmDialog(window, mensaje, "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
-        
-        if(opcion == JOptionPane.YES_OPTION){
-            // Te devuelve al nuevo LoginAnimado premium que creamos
-            LoginModerno regresar = new LoginModerno(); 
-            regresar.setVisible(true);
+        if (window instanceof MenuPrincipal) {
+            MenuPrincipal menuBase = (MenuPrincipal) window;
+            ReporteComprasCliente rCc = new ReporteComprasCliente();
+            menuBase.mostrarContenidoP(rCc);
+            activarBoton(btnComprasC);
+        }
+    }                                           
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MenuPrincipal) {
+            MenuPrincipal menuBase = (MenuPrincipal) window;
             
-            if (window != null) {
-                window.dispose();
-            }
+            // Regresamos al Menú Principal Moderno
+            PanelMPrincipal menuInicio = new PanelMPrincipal();
+            menuBase.cambiarMenuIzquierdo(menuInicio); 
             
-            JLabel mensajeExito = new JLabel("Sesión cerrada exitosamente.");
-            mensajeExito.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-            mensajeExito.setPreferredSize(new Dimension(260, 30)); 
-            
-            JOptionPane.showMessageDialog(null, mensajeExito, "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            PanelBienvenida bienvenida = new PanelBienvenida();
+            menuBase.mostrarContenidoP(bienvenida);
         }
     }
 

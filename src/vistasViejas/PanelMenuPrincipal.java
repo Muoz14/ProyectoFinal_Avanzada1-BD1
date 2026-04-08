@@ -1,4 +1,4 @@
-package vistas;
+package vistasViejas;
 
 import gui.MenuPrincipal;
 import java.awt.Window;
