@@ -44,10 +44,21 @@ public class Registro extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Registro.class.getName());
 
     public Registro() {
-       setTitle("Sistema Apolo - Crear Cuenta");
+        setTitle("Sistema Apolo - Crear Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
+        
+        getRootPane().putClientProperty("JRootPane.titleBarBackground", Color.decode("#1A1A1A"));
+        getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.WHITE);
+        
+        //Cargamos el logo de la barra superior
+        try {
+            java.awt.Image icon = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/LogoBarra.png"));
+            this.setIconImage(icon);
+        } catch (Exception e) {
+            System.out.println("No se encontró el logo: " + e.getMessage());
+        }
 
         // Colores base de la marca
         Color brandDarkBlue = Color.decode("#00384E");

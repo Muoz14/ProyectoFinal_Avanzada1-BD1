@@ -1,0 +1,114 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="844B2E8F-174E-C725-CFE6-42D883526E5C" name="INVENTARIO">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:19:45 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id_movimiento" id="9B6A78B2-6A33-EC85-2631-ACBEF7568F09">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:26:27 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="tipo_movimiento" id="B284C786-1536-41AE-69E6-F031276665FE">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:26:46 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="cantidad" id="2A9E34E3-A13A-7894-F5A0-3583EF1CAA19">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:26:54 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="fecha_movimiento" id="DED071CE-C16C-5E4D-42C9-465E8CCB7B4E">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:27:01 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id_usuario" id="496D6216-7581-BB42-464E-E5C5432C9BE0">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:38:40 UTC</createdTime>
+<generatorID>B53C9A37-617C-D2B0-581F-E763D019F648</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<referedAttribute>AAEAABF1-9845-E664-0D0B-B41F96B83F79</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id_producto" id="6153DD06-5AD5-1BF8-757F-70387DABCA3D">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:38:48 UTC</createdTime>
+<generatorID>CC627C63-36EA-438F-B9BA-F5B9D4A0327A</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<referedAttribute>390B7654-A7CE-F3A9-58D1-BE41618D0063</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="CCD8031C-4CF9-45AE-7464-D014C0D94DA7" name="INVENTARIO PK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:26:45 UTC</createdTime>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<engineerTo>
+<item key="526120C7-62B6-71CA-5A95-CE2DF60EAE28" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>9B6A78B2-6A33-EC85-2631-ACBEF7568F09</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

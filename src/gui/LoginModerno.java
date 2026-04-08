@@ -40,10 +40,21 @@ public class LoginModerno extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginModerno.class.getName());
 
     public LoginModerno() {
-       setTitle("Sistema Apolo - Inicio de Sesión");
+        setTitle("Sistema Apolo - Inicio de Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
+        
+        getRootPane().putClientProperty("JRootPane.titleBarBackground", Color.decode("#1A1A1A"));
+        getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.WHITE);
+        
+        //Cargamos el logo de la barra superior
+        try {
+            java.awt.Image icon = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/LogoBarra.png"));
+            this.setIconImage(icon);
+        } catch (Exception e) {
+            System.out.println("No se encontró el logo: " + e.getMessage());
+        }
 
         // Colores base
         Color brandDarkBlue = Color.decode("#00384E");
@@ -263,11 +274,21 @@ public class LoginModerno extends javax.swing.JFrame {
     public static void main(String args[]) {
         
         try {
-            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+            // 1. Forzamos a que el título de la ventana se pueda pintar
+            javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);
+
+            // 2. Elegimos el tema CLARO para que las tablas y TextFields se vean impecables
+            com.formdev.flatlaf.FlatIntelliJLaf.setup();
+
+            javax.swing.UIManager.put("TitlePane.background", java.awt.Color.decode("#1A1A1A"));
+            javax.swing.UIManager.put("TitlePane.foreground", java.awt.Color.WHITE);
+            
             UIManager.put("PasswordField.showRevealButton", true);
+
         } catch (Exception ex) {
-            System.err.println("Falló al inicializar FlatLaf");
+            System.err.println("Error al inicializar FlatLaf");
         }
+
         java.awt.EventQueue.invokeLater(() -> new LoginModerno().setVisible(true));
     }
 

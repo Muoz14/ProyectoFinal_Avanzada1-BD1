@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import vistas.*;
@@ -16,6 +17,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         // 1. Maximizamos la ventana
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        
+        setTitle("Sistema Apolo - Menú");
+        
+        getRootPane().putClientProperty("JRootPane.titleBarBackground", Color.decode("#1A1A1A"));
+        getRootPane().putClientProperty("JRootPane.titleBarForeground", Color.WHITE);
         
         // 2. Cargamos el logo de la barra superior
         try {

@@ -1,0 +1,117 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="A00E2399-EEC7-4BBD-1797-CFC68A82F38B" name="DETALLE_VENTA">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>A4323CF1-4749-0289-B10C-9EB7D00F60BA</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id_detalle" id="7B40BC3A-6A11-016E-0D8A-251E0D75DD30">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>278D566C-FBD4-2CF3-924D-C97810AB3343</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cantidad" id="96B465A8-A977-A61F-FE3E-DBD4A7C121CE">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>CFDB275F-63DD-BEA5-4FFE-57327087388B</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="precio" id="4107FC5B-DD16-99AC-57BD-ABE60A2C9A2F">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>CAA5599D-8CA1-9B7F-B8C0-74C67D90C5FC</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<ownDataTypeParameters>,10,2</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VENTA_no_factura" id="37488D8F-03B1-86F7-2B24-6793677D9CC2">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>83A5631C-62F9-2634-3EA2-A508C8C05453</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="52512F9D-D311-EBE5-DAAA-9FF09B12C1DF" referredColumn="09D8DD43-35B4-DD9C-6840-69FDC5CB8128"/>
+</associations>
+</Column>
+<Column name="PRODUCTO_id_producto" id="1FABC51A-4E0E-4B61-B610-47D0EDDD79C2">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>F7555B62-F8CF-5C75-D61A-970DC1FAC48D</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="58CFE1DA-E9C7-9FFF-A27F-E7A3206361B5" referredColumn="001CACD5-A9EA-E678-D7D1-46CDDBB668D4"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="16212EFA-6EAE-E139-E743-911F707F8484" name="DETALLE_VENTA_PK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>F179309F-2BE3-61A3-77BB-3A5F39E7D0EA</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7B40BC3A-6A11-016E-0D8A-251E0D75DD30"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="85E7432A-F0D3-A4A8-1643-C832FE69F424" name="DETALLE_VENTA_VENTA_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>CB32F513-0A92-42B4-BC10-EA5039A5D030</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="37488D8F-03B1-86F7-2B24-6793677D9CC2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="394FD935-12A5-104D-F945-313ACF5A2700" name="DETALLE_VENTA_PRODUCTO_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>5921A27E-5935-C3E4-CC15-E5416639B2B7</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1FABC51A-4E0E-4B61-B610-47D0EDDD79C2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

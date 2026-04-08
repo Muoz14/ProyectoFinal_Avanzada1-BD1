@@ -1,0 +1,127 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C5B5E177-8C23-31F0-D241-BC3FFF59F22B" name="INVENTARIO">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>844B2E8F-174E-C725-CFE6-42D883526E5C</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id_movimiento" id="D5499FF9-B659-5733-21BC-8C00416AB3EF">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>9B6A78B2-6A33-EC85-2631-ACBEF7568F09</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="tipo_movimiento" id="34DDB470-2E95-2638-12F5-A27EC9882338">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>B284C786-1536-41AE-69E6-F031276665FE</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cantidad" id="6BEF463B-7BD2-3996-7462-EC3CDEA9FEB4">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>2A9E34E3-A13A-7894-F5A0-3583EF1CAA19</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_movimiento" id="A72BD2BA-CD28-9496-7D2C-4A52F95129D3">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>DED071CE-C16C-5E4D-42C9-465E8CCB7B4E</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="USUARIO_id_usuario" id="D7F6D445-2ED3-D5B9-3E0A-EF2ADA89A313">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>496D6216-7581-BB42-464E-E5C5432C9BE0</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B8D14855-2997-A1C9-561F-7D5FE96E124B" referredColumn="17718832-6EA9-3747-49AF-1C494199E63C"/>
+</associations>
+</Column>
+<Column name="PRODUCTO_id_producto" id="B313CE49-0C4D-3694-2EC1-3F4EA5702722">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>6153DD06-5AD5-1BF8-757F-70387DABCA3D</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="61531A07-5450-4A74-3393-1AE0C907EAFB" referredColumn="001CACD5-A9EA-E678-D7D1-46CDDBB668D4"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4BC49BC7-2781-6FE1-F560-AA28D12945B7" name="INVENTARIO_PK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>CCD8031C-4CF9-45AE-7464-D014C0D94DA7</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D5499FF9-B659-5733-21BC-8C00416AB3EF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2224BA44-42E8-40B0-81C5-E5A899840594" name="INVENTARIO_USUARIO_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>B53C9A37-617C-D2B0-581F-E763D019F648</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D7F6D445-2ED3-D5B9-3E0A-EF2ADA89A313"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3CED24BD-EC6A-0EFF-3216-DB76E0571958" name="INVENTARIO_PRODUCTO_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>CC627C63-36EA-438F-B9BA-F5B9D4A0327A</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B313CE49-0C4D-3694-2EC1-3F4EA5702722"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

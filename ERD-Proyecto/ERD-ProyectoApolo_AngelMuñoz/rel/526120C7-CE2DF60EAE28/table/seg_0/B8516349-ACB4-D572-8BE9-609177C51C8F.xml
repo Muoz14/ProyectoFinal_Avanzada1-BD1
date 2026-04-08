@@ -1,0 +1,99 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B8516349-ACB4-D572-8BE9-609177C51C8F" name="USUARIO">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>062E52CE-7328-9F64-6EE0-2B0F66578C8F</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id_usuario" id="17718832-6EA9-3747-49AF-1C494199E63C">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>AAEAABF1-9845-E664-0D0B-B41F96B83F79</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="nombre_empleado" id="E0C7600E-0DFD-C7F3-C1AA-186556C1CC15">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>DBFDDB32-F8E7-DD6D-A9BF-AB3582C5B1D3</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="apellido_empleado" id="AE770042-45D6-381C-7DA7-4867517B0596">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>047F74A1-2081-0861-48F6-91150F2E701B</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="user" id="B303455D-09C7-0F2A-6C32-7181C8ADB47C">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>BFCEBF76-0F37-DB82-6A02-F0888D07A6F0</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>25</dataTypeSize>
+<ownDataTypeParameters>25,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="pass" id="873CA085-9E3A-903D-C524-D56082581DD8">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>AD768C61-27FD-F4A0-B40C-C30DE3A4080C</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="borrado" id="6625A77C-8C54-E3E5-47D8-9B0ED1963D1D">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>0FD1608E-DD3A-61FA-915C-67ED4BE60355</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="941BB76C-2C6D-B609-4157-237B4E94A14B" name="USUARIO_PK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>F607027D-D282-6485-3343-AC75044755AF</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="17718832-6EA9-3747-49AF-1C494199E63C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

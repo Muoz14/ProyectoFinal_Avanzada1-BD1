@@ -1,0 +1,103 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="22370FE4-78A5-B360-7C33-2E304A7D38E0" name="VENTA">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>A2913E80-E556-3E66-E656-CB51D8204943</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="no_factura" id="09D8DD43-35B4-DD9C-6840-69FDC5CB8128">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>A4991A90-646B-C5D6-9D22-E2AEDA965434</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,11,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha" id="63042CCD-310D-2415-18AC-8AF538A39640">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>12C87156-33CA-3A96-9C8A-7F6A620C8DA5</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CLIENTE_id_cliente" id="5ED383AA-5434-EC6A-5DC9-5FC645434AE2">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>882E974D-934F-2CD9-AC9F-404763750F71</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="20AB6C8F-C734-1B1D-184E-068FCA9E2055" referredColumn="F5C46ED7-7861-9F39-934D-7CDD2189900B"/>
+</associations>
+</Column>
+<Column name="USUARIO_id_usuario" id="0825AF12-0E90-07D8-2152-6CEA70E1EB15">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>2CF027D1-1766-5312-7A96-70AF079D8CB9</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>11</dataTypePrecision>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B95C8624-A2CC-12C6-455C-469695C793D4" referredColumn="17718832-6EA9-3747-49AF-1C494199E63C"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="0FEF8847-98C3-0D57-060C-015A5C8155F2" name="VENTA_PK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>42AC95C1-3C96-5AC7-9BFB-BA7ED63CCD95</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="09D8DD43-35B4-DD9C-6840-69FDC5CB8128"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="598D22D2-B135-9CAA-E269-AF33A1011332" name="VENTA_CLIENTE_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>0DD00C39-E73B-863E-FA00-3E0A8FF0E8D4</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5ED383AA-5434-EC6A-5DC9-5FC645434AE2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3B444B03-AF16-BC20-3CDA-62C84421448D" name="VENTA_USUARIO_FK">
+<createdBy>angel</createdBy>
+<createdTime>2026-04-03 15:51:26 UTC</createdTime>
+<generatorID>04B2D73C-D2D2-8718-2F49-24BAB1B5B307</generatorID>
+<ownerDesignName>ERD-ProyectoApolo_AngelMuñoz</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0825AF12-0E90-07D8-2152-6CEA70E1EB15"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
