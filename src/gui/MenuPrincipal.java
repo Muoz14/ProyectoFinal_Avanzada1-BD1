@@ -9,14 +9,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuPrincipal.class.getName());
 
-    /**
-     * Creates new form MenuPrincipal
-     */
     public MenuPrincipal() {
         initComponents();
-        this.setExtendedState(MAXIMIZED_BOTH);
+        
+        // 1. Maximizamos la ventana
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
+        // 2. Cargamos el logo de la barra superior
         try {
             java.awt.Image icon = java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/recursos/LogoBarra.png"));
             this.setIconImage(icon);
@@ -24,27 +23,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
             System.out.println("No se encontró el logo: " + e.getMessage());
         }
 
-        this.setExtendedState(MAXIMIZED_BOTH);
+        // 3. Inyectamos el NUEVO panel lateral (PanelMPrincipal)
         panelAzulIzquierdo.setLayout(new BorderLayout());
-        cambiarMenuIzquierdo(new PanelMenuPrincipal());
+        cambiarMenuIzquierdo(new PanelMPrincipal());
         
-        panelAzulIzquierdo.setLayout(new BorderLayout());
-        cambiarMenuIzquierdo(new PanelMenuPrincipal());
-        
-        // 1. Instanciamos el nuevo panel de bienvenida
+        // 4. Inyectamos el panel central de Bienvenida usando tu propio método
         vistas.PanelBienvenida bienvenida = new vistas.PanelBienvenida();
-
-        // 2. Asignamos el tamaño y posición (ajusta estos números al tamaño de tu panel central blanco)
-        // Supongamos que tu panel central se llama "pnlCentro" o algo similar
-        bienvenida.setSize(1350, 1040); // El tamaño que vi que usaste en otros paneles
-        bienvenida.setLocation(0, 0);
-
-        // 3. Limpiamos el panel central y le agregamos el de bienvenida
-        contenido.removeAll(); // Cambia pnlCentro por el nombre de tu panel blanco en NetBeans
-        contenido.add(bienvenida, BorderLayout.CENTER);
-        contenido.revalidate();
-        contenido.repaint();
-        
+        mostrarContenidoP(bienvenida);
     }
     
     public void cambiarMenuIzquierdo(JPanel p){
@@ -57,7 +42,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panelAzulIzquierdo.repaint();
     }
 
-        public void mostrarContenidoP(JPanel panelNuevo) {
+    public void mostrarContenidoP(JPanel panelNuevo) {
         // 1. Limpiar el panel central blanco por completo
         contenido.removeAll(); 
         

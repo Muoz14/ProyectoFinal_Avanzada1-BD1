@@ -25,24 +25,30 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
         panelAzulIzquierdo.setBackground(new java.awt.Color(0, 56, 78));
         panelAzulIzquierdo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnCerrarSesion.setBackground(new java.awt.Color(0, 56, 78));
         btnCerrarSesion.setFont(new java.awt.Font("Franklin Gothic Book", 1, 16)); // NOI18N
-        btnCerrarSesion.setForeground(new java.awt.Color(0, 56, 78));
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.setBorder(null);
+        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
         panelAzulIzquierdo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 750, 216, 70));
 
+        btnGusuarios1.setBackground(new java.awt.Color(0, 56, 78));
         btnGusuarios1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 16)); // NOI18N
-        btnGusuarios1.setForeground(new java.awt.Color(0, 56, 78));
+        btnGusuarios1.setForeground(new java.awt.Color(255, 255, 255));
         btnGusuarios1.setText("Ir a Reportes");
         btnGusuarios1.setBorder(null);
+        btnGusuarios1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGusuarios1.addActionListener(this::btnGusuarios1ActionPerformed);
         panelAzulIzquierdo.add(btnGusuarios1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 590, 216, 70));
 
+        btnGproductos.setBackground(new java.awt.Color(0, 56, 78));
         btnGproductos.setFont(new java.awt.Font("Franklin Gothic Book", 1, 16)); // NOI18N
-        btnGproductos.setForeground(new java.awt.Color(0, 56, 78));
+        btnGproductos.setForeground(new java.awt.Color(255, 255, 255));
         btnGproductos.setText("Ir a Gestiones");
         btnGproductos.setBorder(null);
+        btnGproductos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGproductos.addActionListener(this::btnGproductosActionPerformed);
         panelAzulIzquierdo.add(btnGproductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 216, 70));
 
@@ -103,7 +109,7 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
         int opcion = javax.swing.JOptionPane.showConfirmDialog(window, mensaje, "Cerrar Sesión", javax.swing.JOptionPane.YES_NO_OPTION);
         
         if(opcion == javax.swing.JOptionPane.YES_OPTION){
-            gui.FormLogin regresar = new gui.FormLogin(); 
+            gui.LoginModerno regresar = new gui.LoginModerno(); 
             regresar.setVisible(true);
             
             if (window != null) {
